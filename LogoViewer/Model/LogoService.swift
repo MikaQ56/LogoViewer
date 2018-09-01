@@ -12,7 +12,6 @@ class LogoService {
     
     static let shared = LogoService()
     private init(){}
-    
     private var task: URLSessionDataTask?
     private var stringUrl = "https://logo.clearbit.com/"
     

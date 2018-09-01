@@ -8,6 +8,7 @@
 
 import UIKit
 
+// MARK: - Outlets
 class ViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
@@ -15,6 +16,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
+}
+
+// MARK: - Logo
+extension ViewController {
+    
     @IBAction func didTapSearchButton() {
         toggleActivityIndicator(shown: true)
         searchLogo()
@@ -22,6 +28,7 @@ class ViewController: UIViewController {
 
     func searchLogo() {
         guard let domain = textField.text else {
+            domainAlert()
             return
         }
         LogoService.shared.getLogo(domain: domain) { (success, data) in
@@ -39,18 +46,30 @@ class ViewController: UIViewController {
         activityIndicator.isHidden = !shown
     }
     
+    private func updateLogo(data: Data){
+        imageView.image = UIImage(data: data)
+    }
+}
+
+// MARK: - Alerts
+extension ViewController {
+    
     private func presentAlert(){
         let alertVC = UIAlertController(title: "Error", message: "The logo download failed.", preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         present(alertVC, animated: true, completion: nil)
     }
     
-    private func updateLogo(data: Data){
-        imageView.image = UIImage(data: data)
+    private func domainAlert() {
+        let alertVC = UIAlertController(title: "Pas de nom de domaine...", message: "Entrez un nom de domaine pour voir le logo !", preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alertVC, animated: true, completion: nil)
     }
 }
 
+// MARK: - Keyboard
 extension ViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         searchLogo()
