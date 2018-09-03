@@ -14,9 +14,14 @@ class LogoService {
     private init(){}
     private var task: URLSessionDataTask?
     private var stringUrl = "https://logo.clearbit.com/"
+    private var session = URLSession(configuration: .default)
+    
+    init(session: URLSession) {
+        self.session = session
+    }
     
     func getLogo(domain: String, callback: @escaping (Bool, Data?) -> Void) {
-        let session = URLSession(configuration: .default)
+        
         let stringUrlAsked = "\(stringUrl)\(domain)"
         let logoUrl = URL(string: stringUrlAsked)!
         task?.cancel()
